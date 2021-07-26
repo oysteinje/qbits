@@ -33,7 +33,7 @@ jobs:
       with:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
-        template: ./azuredeploy.json
+        template: .github/workflows/azuredeploy.json
         parameters: storageAccountType=Standard_LRS
 
       # output containerName variable from template
