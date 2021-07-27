@@ -61,6 +61,7 @@ resource aks 'Microsoft.ContainerService/managedClusters@2020-09-01' = {
     networkProfile: {
       networkPlugin: 'azure'
       loadBalancerSku: 'standard'
+      serviceCidr: '172.0.0.0/16'
     }
   }
 }
