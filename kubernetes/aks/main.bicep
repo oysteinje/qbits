@@ -13,7 +13,7 @@ param location string = resourceGroup().location
 param nodeCount int = 1
 
 // description('The size of the Virtual Machine.')
-param nodeVMSize string = 'Standard_B1s'
+param nodeVMSize string = 'Standard_B2s'
 
 // The nodes' subnet ID
 param subnetID string
