@@ -19,7 +19,7 @@ jobs:
       with:
         creds: ${{ secrets.QBITS_AZURE_CREDENTIALS }}
 
-      # Create resource group
+      # Deploy resources
     - name: Azure CLI script
       uses: azure/CLI@v1
       with:
@@ -29,3 +29,8 @@ jobs:
           az deployment group create \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --template-file ./kubernetes/aks/azure-vnet/main.bicep
+
+          az deployment group create \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --template-file ./kubernetes/aks/main.bicep \
+            --parameters subnetID="/subscriptions/a83145a3-215b-44a4-9387-a540faaa58e9/resourceGroups/qbits-aks/providers/Microsoft.Network/virtualNetworks/vnet-hub/subnets/AzureKubernetes"
