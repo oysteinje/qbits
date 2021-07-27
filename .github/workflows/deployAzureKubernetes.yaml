@@ -4,7 +4,7 @@ name: Azure Kubernetes Deployment
 
 env:
   AZURE_LOCATION: norwayeast
-  AZURE_RESOURCE_GROUP: qbits-github
+  AZURE_RESOURCE_GROUP: qbits-aks
 
 jobs:
   build-and-deploy:
@@ -28,5 +28,4 @@ jobs:
           az group create -l ${{ env.AZURE_LOCATION }} -n ${{ env.AZURE_RESOURCE_GROUP }}
           az deployment group create \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --template-file ./kubernetes/aks/azuredeploy.bicep \
-            --parameters storagePrefix=qbits
+            --template-file ./kubernetes/aks/azure-vnet/main.bicep
