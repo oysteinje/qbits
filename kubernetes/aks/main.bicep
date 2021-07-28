@@ -68,5 +68,4 @@ resource aks 'Microsoft.ContainerService/managedClusters@2020-09-01' = {
 }
 
 output aksid string = aks.id
-output apiServerAddress string = aks.properties.privateFQDN
 output aksnodesrg string = aks.properties.nodeResourceGroup

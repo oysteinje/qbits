@@ -5,6 +5,7 @@ name: Azure Kubernetes Deployment
 env:
   AZURE_LOCATION: norwayeast
   AZURE_RESOURCE_GROUP: qbits-aks
+  AZURE_DNS_PREFIX: qbits
 
 jobs:
   build-and-deploy:
@@ -25,12 +26,23 @@ jobs:
       with:
         azcliversion: 2.26.1
         inlineScript: |
-          az group create -l ${{ env.AZURE_LOCATION }} -n ${{ env.AZURE_RESOURCE_GROUP }}
-          az deployment group create \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --template-file ./kubernetes/aks/azure-vnet/main.bicep
+          curl -o get-akse.sh https://raw.githubusercontent.com/Azure/aks-engine/master/scripts/get-akse.sh
+          chmod 700 get-akse.sh
+          ./get-akse.sh
 
-          az deployment group create \
+          aks-engine deploy --dns-prefix ${{ env.AZURE_DNS_PREFIX }} \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --template-file ./kubernetes/aks/main.bicep \
-            --parameters subnetID="/subscriptions/a83145a3-215b-44a4-9387-a540faaa58e9/resourceGroups/qbits-aks/providers/Microsoft.Network/virtualNetworks/vnet-hub/subnets/AzureKubernetes"
+            --location ${{ env.AZURE_LOCATION }} \
+            --api-model kubernetes/aks/example.json
+
+          KUBECONFIG=_output/${{ env.AZURE_DNS_PREFIX }}/kubeconfig/kubeconfig.${{ env.AZURE_LOCATION }}.json kubectl cluster-info
+
+          # az group create -l ${{ env.AZURE_LOCATION }} -n ${{ env.AZURE_RESOURCE_GROUP }}
+          # az deployment group create \
+          #   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+          #   --template-file ./kubernetes/aks/azure-vnet/main.bicep
+
+          # az deployment group create \
+          #   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+          #   --template-file ./kubernetes/aks/main.bicep \
+          #   --parameters subnetID="/subscriptions/a83145a3-215b-44a4-9387-a540faaa58e9/resourceGroups/qbits-aks/providers/Microsoft.Network/virtualNetworks/vnet-hub/subnets/AzureKubernetes"
