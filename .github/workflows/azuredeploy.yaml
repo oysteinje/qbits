@@ -54,8 +54,6 @@ jobs:
             --ssh-key-values ./.ssh/id_rsa.pub \
             --public-ip-address-dns-name backend-${{ env.AZURE_PREFIX }} \
             --assign-identity \
-            --role Contributor \
-            --scope "/subscriptions/${{ env.AZURE_SUBSCRIPTION_ID }}/resourceGroups/${{ env.AZURE_RESOURCE_GROUP }}" \
             --size Standard_B2s
 
           echo "# open port 80 for web traffic"
@@ -119,7 +117,8 @@ jobs:
           #   --size Standard_A2_v2 \ 
           #   --eviction-policy Delete \
           #   --custom-data ./MyCloudInitScript.yml \
-
+          #             --role Contributor \
+          #  --scope "/subscriptions/${{ env.AZURE_SUBSCRIPTION_ID }}/resourceGroups/${{ env.AZURE_RESOURCE_GROUP }}" \
           #   --assign-identity \
           #   --role Contributor \
           #   
