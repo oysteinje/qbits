@@ -1,0 +1,63 @@
+on: [push]
+name: azure deploy 
+env:
+  AZURE_LOCATION: norwayeast
+  AZURE_PREFIX: ystrte
+  AZURE_RESOURCE_GROUP: rg-main
+  AZURE_SUBSCRIPTION_ID: a83145a3-215b-44a4-9387-a540faaa58e9
+  SSH_PUBLIC_KEY: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCeXzL3j2sjF/C4qBTzf5ed2f7VMUa4su6+5UAcVqCjm1lKyBI9f7f0VOHBBqiMtVI9yl6SkFNMpELjgktbmq/j0DvjFp6CKpL0pd+mpohBEajvELcp63yPXYLXahGzWhx8csz9sXVe1suuvWGZroyitb4twKg03dQpxnHW8IEBwW5Ki70YW3e01GacQCWnD7NemmOBwE7wikDsp8nn5BUiDt4YDIarZ0rjyiGeEQiPkV1gO2aVi9JvDDYC9ga00ye14v+JortmYk47A5CNa96R4De4DLamO2FQ1PmtpI9yBlEXBoO+AZRvsHadtOEyZm0ISuSTzn243CGg15F5Wh94jV7tR9AS/c7MInjp3cq8Q0VTwTyBqVZjrd4hCxyr9jZQuEqCOGTlEEQ/6WM/I+506pxIPLNEpQ5nB2iQLmEYmkyi5wni+E6kOYd2XIXmiZtJLCGzTlCynmRgQejhdMZ2Cul81z6nZmVXvn0AKkfCXaASVtSHt/lGpT8MQ/lRFmk= oystein@oystein-ubuntu"
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout code
+    - uses: actions/checkout@main
+
+#       # Log into Azure
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.QBITS_AZURE_CREDENTIALS }}
+
+      # Deploy resources
+    - name: Azure CLI script
+      uses: azure/CLI@v1
+      with:
+        azcliversion: 2.26.1
+        inlineScript: |
+          # Deploy Resource group 
+          az group create -l ${{ env.AZURE_LOCATION }} -n ${{ env.AZURE_RESOURCE_GROUP }}
+    
+          # Deploy network 
+          az deployment group create \
+            --name rollout01 \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --template-file ./azure/azure-vnet.bicep
+
+          # # Get deployment output 
+          # az deployment group show \
+          #   -g ${{ env.AZURE_RESOURCE_GROUP }} \
+          #   -n rollout01 \
+          #   --query properties.outputs.resourceID.value
+
+          # # Deploy Virtual Machine 
+          # az vm create \
+          #   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+          #   --name "vm-${{ env.AZURE_PREFIX }}" \
+          #   --image UbuntuLTS \
+          #   --instance-count 2 \ 
+          #   --admin-username azureuser \
+          #   --generate-ssh-keys \
+          #   --location ${{ env.AZURE_LOCATION }} \
+          #   --priority Spot \
+          #   --size Standard_A1_v2 \ 
+          #   --eviction-policy Delete \
+          #   --custom-data ./MyCloudInitScript.yml \
+          #   --public-ip-address-dns-name backend.qbits.no \ 
+          #   --assign-identity \
+          #   --role Contributor \
+          #   --scope "/subscriptions/${{ env.AZURE_SUBSCRIPTION_ID }}" \
+          #   --authentication-type ssh \
+          #   --ssh-key-values ${{ env.SSH_PUBLIC_KEY }} \
+          #   --tags location=${{ env.AZURE_LOCATION}} prefix=${{ env.AZURE_PREFIX }} resourcegroup=${{ env.AZURE_RESOURCE_GROUP }} \ 
+          #   --subnet "/subscriptions/${{ env.AZURE_SUBSCRIPTION_ID }}/resourcegroups/${{ env.AZURE_RESOURCE_GROUP }}/providers/Microsoft.Network/virtualNetworks/MyNet/subnets/MySubnet"
