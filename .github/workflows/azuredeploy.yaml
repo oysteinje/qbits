@@ -25,6 +25,9 @@ jobs:
       with:
         azcliversion: 2.28.0
         inlineScript: |
+          echo "# Enable xtrace"
+          set -o xtrace
+
           echo "# Deploy Resource group" 
           az group create -l ${{ env.AZURE_LOCATION }} -n ${{ env.AZURE_RESOURCE_GROUP }}
     
@@ -72,7 +75,7 @@ jobs:
           echo "# set cname" 
           az network dns record-set cname set-record \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --zone-name azure.${{ env.AZURE_DNS_ZONE }} \
+            --zone-name ${{ env.AZURE_DNS_ZONE }} \
             --record-set-name main.azure \
             --cname backend-${{ env.AZURE_PREFIX }}.${{ env.AZURE_LOCATION }}.cloudapp.azure.com
 
