@@ -42,4 +42,13 @@ sudo apt-get install -y mongodb-org
 # Install firebase CLI
 cd 
 curl -sL https://firebase.tools | bash
-export FIREBASE_TOKEN=$(cat /home/azureuser/firebase_token)
+export FIREBASE_TOKEN=$(cat firebase_token)
+
+# Install monkeytype 
+cd
+git clone git@github.com:Miodec/monkeytype.git
+json='{"projects": { "default": "monkeytype-90585" } }'
+echo $json > monkeytype/.firebaserc_example
+cd monkeytype
+npm install
+npm run start:dev

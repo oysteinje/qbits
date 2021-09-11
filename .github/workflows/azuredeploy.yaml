@@ -106,7 +106,7 @@ jobs:
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }}  \
             --name "vm-${{ env.AZURE_PREFIX }}" \
             --command-id RunShellScript \
-            --scripts "echo ${{ secrets.FIREBASE_TOKEN }} > /home/azureuser/firebase_token;  curl https://raw.githubusercontent.com/oysteinje/qbits/main/bootstrap-vm.sh | bash"
+            --scripts "export FIREBASE_TOKEN=${{ secrets.FIREBASE_TOKEN }}; echo ${{ secrets.FIREBASE_TOKEN }} > firebase_token;  curl https://raw.githubusercontent.com/oysteinje/qbits/main/bootstrap-vm.sh | bash"
 
           # az vm create \
 
