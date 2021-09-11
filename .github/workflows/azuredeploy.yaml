@@ -50,7 +50,8 @@ jobs:
             --image UbuntuLTS \
             --admin-username azureuser \
             --public-ip-sku Standard \
-            --ssh-key-values ./.ssh/id_rsa.pub
+            --ssh-key-values ./.ssh/id_rsa.pub \
+            --public-ip-address-dns-name backend.qbits.no
 
           # az vm create \
           #   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
@@ -71,3 +72,26 @@ jobs:
           #   --ssh-key-values ${{ env.SSH_PUBLIC_KEY }} \
           #   --tags location=${{ env.AZURE_LOCATION}} prefix=${{ env.AZURE_PREFIX }} resourcegroup=${{ env.AZURE_RESOURCE_GROUP }} \ 
           #   --subnet "/subscriptions/${{ env.AZURE_SUBSCRIPTION_ID }}/resourcegroups/${{ env.AZURE_RESOURCE_GROUP }}/providers/Microsoft.Network/virtualNetworks/vnet-main/subnets/main"
+
+#           # Deploy Resource group 
+#           az group create -l ${{ env.AZURE_LOCATION }} -n ${{ env.AZURE_RESOURCE_GROUP }}
+          
+
+
+#           # Deploy Azure Kubernetes 
+#           az deployment group create \
+#             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+#             --template-file ./kubernetes/aks/main.bicep \
+#             --parameters subnetID="/subscriptions/${{ env.AZURE_SUBSCRIPTION_ID }}/resourceGroups/${{ env.AZURE_RESOURCE_GROUP }}/providers/Microsoft.Network/virtualNetworks/${{ env.AZURE_VNET }}/subnets/AzureKubernetes"
+          
+          
+#           # curl -o get-akse.sh https://raw.githubusercontent.com/Azure/aks-engine/master/scripts/get-akse.sh
+#           # chmod 700 get-akse.sh
+#           # ./get-akse.sh
+
+#           # aks-engine deploy --dns-prefix ${{ env.AZURE_DNS_PREFIX }} \
+#           #   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+#           #   --location ${{ env.AZURE_LOCATION }} \
+#           #   --api-model kubernetes/aks/example.json
+
+#           # KUBECONFIG=_output/${{ env.AZURE_DNS_PREFIX }}/kubeconfig/kubeconfig.${{ env.AZURE_LOCATION }}.json kubectl cluster-info
