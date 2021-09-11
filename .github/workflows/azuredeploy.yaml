@@ -49,7 +49,8 @@ jobs:
             --admin-username azureuser \
             --public-ip-sku Standard \
             --ssh-key-values ./.ssh/id_rsa.pub \
-            --public-ip-address-dns-name backend-${{ env.AZURE_PREFIX }}
+            --public-ip-address-dns-name backend-${{ env.AZURE_PREFIX }} \
+            --size Standard_B2s
 
           echo "# open port 80 for web traffic"
           az vm open-port \
@@ -60,19 +61,19 @@ jobs:
           echo "# create dns zone" 
           az network dns zone create \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --name azure.${{ env.AZURE_DNS_ZONE }}
+            --name ${{ env.AZURE_DNS_ZONE }}
 
           echo "# create empty cname" 
           az network dns record-set cname create \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --zone-name azure.${{ env.AZURE_DNS_ZONE }} \
-            --name ssh
+            --zone-name ${{ env.AZURE_DNS_ZONE }} \
+            --name main.azure
 
           echo "# set cname" 
           az network dns record-set cname set-record \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --zone-name azure.${{ env.AZURE_DNS_ZONE }} \
-            --record-set-name ssh \
+            --record-set-name main.azure \
             --cname backend-${{ env.AZURE_PREFIX }}.${{ env.AZURE_LOCATION }}.cloudapp.azure.com
 
           echo "# bootstrap VM"
@@ -88,7 +89,7 @@ jobs:
           #   --generate-ssh-keys \
           #   --priority Spot \
           #    --priority Spot \
-          #   --size Standard_A1_v2 \ 
+          #   --size Standard_A2_v2 \ 
           #   --eviction-policy Delete \
           #   --custom-data ./MyCloudInitScript.yml \
 
