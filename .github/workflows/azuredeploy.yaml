@@ -53,11 +53,18 @@ jobs:
             --public-ip-sku Standard \
             --ssh-key-values ./.ssh/id_rsa.pub \
             --public-ip-address-dns-name backend-${{ env.AZURE_PREFIX }} \
+            --assign-identity \
             --size Standard_B2s
 
           echo "# open port 80 for web traffic"
           az vm open-port \
             --port 80 \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --name "vm-${{ env.AZURE_PREFIX }}"
+
+          echo "# open port 443 for web traffic"
+          az vm open-port \
+            --port 443 \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --name "vm-${{ env.AZURE_PREFIX }}"
 
@@ -78,6 +85,19 @@ jobs:
             --zone-name ${{ env.AZURE_DNS_ZONE }} \
             --record-set-name main.azure \
             --cname backend-${{ env.AZURE_PREFIX }}.${{ env.AZURE_LOCATION }}.cloudapp.azure.com
+
+          echo "# create empty cname for me.qbits.no" 
+          az network dns record-set cname create \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --zone-name ${{ env.AZURE_DNS_ZONE }} \
+            --name me
+
+          echo "# set cname for me.qbits.no" 
+          az network dns record-set cname set-record \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --zone-name ${{ env.AZURE_DNS_ZONE }} \
+            --record-set-name me.qbits \
+            --cname oysteinje.github.io
 
           echo "# bootstrap VM"
           az vm run-command invoke \
