@@ -34,30 +34,29 @@ jobs:
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --template-file ./azure/azure-vnet.bicep
 
-          # # Get deployment output 
-          # az deployment group show \
-          #   -g ${{ env.AZURE_RESOURCE_GROUP }} \
-          #   -n rollout01 \
-          #   --query properties.outputs.resourceID.value
+          # Get deployment output 
+          az deployment group show \
+            -g ${{ env.AZURE_RESOURCE_GROUP }} \
+            -n rollout01 \
+            --query properties.outputs.subnet1Id.value
 
-          # # Deploy Virtual Machine 
-          # az vm create \
-          #   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-          #   --name "vm-${{ env.AZURE_PREFIX }}" \
-          #   --image UbuntuLTS \
-          #   --instance-count 2 \ 
-          #   --admin-username azureuser \
-          #   --generate-ssh-keys \
-          #   --location ${{ env.AZURE_LOCATION }} \
-          #   --priority Spot \
-          #   --size Standard_A1_v2 \ 
-          #   --eviction-policy Delete \
-          #   --custom-data ./MyCloudInitScript.yml \
-          #   --public-ip-address-dns-name backend.qbits.no \ 
-          #   --assign-identity \
-          #   --role Contributor \
-          #   --scope "/subscriptions/${{ env.AZURE_SUBSCRIPTION_ID }}" \
-          #   --authentication-type ssh \
-          #   --ssh-key-values ${{ env.SSH_PUBLIC_KEY }} \
-          #   --tags location=${{ env.AZURE_LOCATION}} prefix=${{ env.AZURE_PREFIX }} resourcegroup=${{ env.AZURE_RESOURCE_GROUP }} \ 
-          #   --subnet "/subscriptions/${{ env.AZURE_SUBSCRIPTION_ID }}/resourcegroups/${{ env.AZURE_RESOURCE_GROUP }}/providers/Microsoft.Network/virtualNetworks/MyNet/subnets/MySubnet"
+          # Deploy Virtual Machine 
+          az vm create \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --name "vm-${{ env.AZURE_PREFIX }}" \
+            --image UbuntuLTS \
+            --admin-username azureuser \
+            --generate-ssh-keys \
+            --location ${{ env.AZURE_LOCATION }} \
+            --priority Spot \
+            --size Standard_A1_v2 \ 
+            --eviction-policy Delete \
+            --custom-data ./MyCloudInitScript.yml \
+            --public-ip-address-dns-name backend.qbits.no \ 
+            --assign-identity \
+            --role Contributor \
+            --scope "/subscriptions/${{ env.AZURE_SUBSCRIPTION_ID }}" \
+            --authentication-type ssh \
+            --ssh-key-values ${{ env.SSH_PUBLIC_KEY }} \
+            --tags location=${{ env.AZURE_LOCATION}} prefix=${{ env.AZURE_PREFIX }} resourcegroup=${{ env.AZURE_RESOURCE_GROUP }} \ 
+            --subnet "/subscriptions/${{ env.AZURE_SUBSCRIPTION_ID }}/resourcegroups/${{ env.AZURE_RESOURCE_GROUP }}/providers/Microsoft.Network/virtualNetworks/vnet-main/subnets/main"
