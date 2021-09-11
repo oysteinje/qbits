@@ -52,7 +52,6 @@ jobs:
             --admin-username azureuser \
             --public-ip-sku Standard \
             --ssh-key-values ./.ssh/id_rsa.pub \
-            --priority Spot \
             --public-ip-address-dns-name backend-${{ env.AZURE_PREFIX }}
 
           echo "# create dns zone" 
@@ -72,12 +71,19 @@ jobs:
             --zone-name azure.${{ env.AZURE_DNS_ZONE }} \
             --record-set-name ssh \
             --cname backend-${{ env.AZURE_PREFIX }}.${{ env.AZURE_LOCATION }}.cloudapp.azure.com
-          
+
+          echo "# bootstrap VM"
+          az vm run-command invoke \
+            -resource-group ${{ env.AZURE_RESOURCE_GROUP }}  \
+            --name "vm-${{ env.AZURE_PREFIX }}" \
+            --command-id RunShellScript \
+            --scripts "curl -Lo https://github.com/oysteinje/qbits/blob/main/bootstrap-vm.sh | bash"
+
           # az vm create \
 
 
           #   --generate-ssh-keys \
-          #   
+          #   --priority Spot \
           #    --priority Spot \
           #   --size Standard_A1_v2 \ 
           #   --eviction-policy Delete \
