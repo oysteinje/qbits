@@ -1,3 +1,8 @@
+upstream app_monkeytype {
+    server 127.0.0.1:5000;
+    keepalive 8;
+}
+
 server {
        listen 80;
        listen [::]:80;
@@ -11,5 +16,10 @@ server {
                try_files $uri $uri/ =404;
        }
 
+       location /monkeytype {
+                proxy_pass http://app_monkeytype/;
+                proxy_redirect off;
+       }
+       
        access_log  /var/log/nginx/domain1.access.log;
 }
