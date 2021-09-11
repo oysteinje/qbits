@@ -40,4 +40,6 @@ sudo apt-get update
 sudo apt-get install -y mongodb-org
 
 # Install firebase CLI
+cd 
 curl -sL https://firebase.tools | bash
+export FIREBASE_TOKEN=$(cat /home/azureuser/firebase_token)
