@@ -52,22 +52,27 @@ jobs:
             --admin-username azureuser \
             --public-ip-sku Standard \
             --ssh-key-values ./.ssh/id_rsa.pub \
-            --priority Spot \
             --public-ip-address-dns-name backend-${{ env.AZURE_PREFIX }}
 
           # create dns zone 
           az network dns zone create \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }}  \
-            --name ${{ env.AZURE_DNS_ZONE }}
-
-          az network dns record-set cname create \
-            --name backend-${{ env.AZURE_PREFIX }} \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --zone-name qbits.no \
-            -c backend-ystrte.norwayeast.cloudapp.azure.com
-            
-            #--target-resource "/subscriptions/${{ env.AZURE_SUBSCRIPTION_ID }}/resourcegroups/${{ env.AZURE_RESOURCE_GROUP }}/providers/Microsoft.Network/publicIPAddresses/vm-${{ env.AZURE_PREFIX }}PublicIP"
+            --name azure.${{ env.AZURE_DNS_ZONE }}
 
+          # create empty cname 
+          az network dns record-set cname create \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --zone-name azure.${{ env.AZURE_DNS_ZONE }} \
+            --name ssh \
+            --if-none-match 2> /dev/null
+
+          # set cname 
+          az network dns record-set cname set-record \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --zone-name azure.${{ env.AZURE_DNS_ZONE }} \
+            --record-set-name ssh \
+            --cname backend-${{ env.AZURE_PREFIX }}.${{ env.AZURE_LOCATION }}.cloudapp.azure.com
+          
           # az vm create \
           #   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
           #   --name "vm-${{ env.AZURE_PREFIX }}" \
@@ -75,7 +80,7 @@ jobs:
           #   --admin-username azureuser \
           #   --generate-ssh-keys \
           #   
-          #   
+          #    --priority Spot \
           #   --size Standard_A1_v2 \ 
           #   --eviction-policy Delete \
           #   --custom-data ./MyCloudInitScript.yml \
