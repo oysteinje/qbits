@@ -40,14 +40,18 @@ jobs:
             -n rollout01-${{ env.GITHUB_RUN_NUMBER }} \
             --query properties.outputs.subnet1Id.value
 
+          # Create SSH key 
+          #az sshkey create --location ${{ env.AZURE_LOCATION }} --public-key "@filename" --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --name "mySshPublicKeyName"
+
           # Deploy Virtual Machine 
           az vm create \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --name "vm-${{ env.AZURE_PREFIX }}" \
             --image UbuntuLTS \
             --admin-username azureuser \
-            --generate-ssh-keys 
-            
+            --public-ip-sku Standard \
+            --ssh-key-values ./.ssh/id_rsa.pub
+
           # az vm create \
           #   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
           #   --name "vm-${{ env.AZURE_PREFIX }}" \
