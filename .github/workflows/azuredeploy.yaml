@@ -6,7 +6,6 @@ env:
   AZURE_RESOURCE_GROUP: rg-main
   AZURE_DNS_ZONE: qbits.no
   AZURE_SUBSCRIPTION_ID: a83145a3-215b-44a4-9387-a540faaa58e9
-  SSH_PUBLIC_KEY: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCeXzL3j2sjF/C4qBTzf5ed2f7VMUa4su6+5UAcVqCjm1lKyBI9f7f0VOHBBqiMtVI9yl6SkFNMpELjgktbmq/j0DvjFp6CKpL0pd+mpohBEajvELcp63yPXYLXahGzWhx8csz9sXVe1suuvWGZroyitb4twKg03dQpxnHW8IEBwW5Ki70YW3e01GacQCWnD7NemmOBwE7wikDsp8nn5BUiDt4YDIarZ0rjyiGeEQiPkV1gO2aVi9JvDDYC9ga00ye14v+JortmYk47A5CNa96R4De4DLamO2FQ1PmtpI9yBlEXBoO+AZRvsHadtOEyZm0ISuSTzn243CGg15F5Wh94jV7tR9AS/c7MInjp3cq8Q0VTwTyBqVZjrd4hCxyr9jZQuEqCOGTlEEQ/6WM/I+506pxIPLNEpQ5nB2iQLmEYmkyi5wni+E6kOYd2XIXmiZtJLCGzTlCynmRgQejhdMZ2Cul81z6nZmVXvn0AKkfCXaASVtSHt/lGpT8MQ/lRFmk= oystein@oystein-ubuntu"
 
 jobs:
   build-and-deploy:
@@ -47,11 +46,13 @@ jobs:
           # Deploy Virtual Machine 
           az vm create \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --location ${{ env.AZURE_LOCATION }} \
             --name "vm-${{ env.AZURE_PREFIX }}" \
             --image UbuntuLTS \
             --admin-username azureuser \
             --public-ip-sku Standard \
             --ssh-key-values ./.ssh/id_rsa.pub \
+            --priority Spot \
             --public-ip-address-dns-name backend-${{ env.AZURE_PREFIX }}
 
           # create dns zone 
@@ -71,17 +72,16 @@ jobs:
           #   --image UbuntuLTS \
           #   --admin-username azureuser \
           #   --generate-ssh-keys \
-          #   --location ${{ env.AZURE_LOCATION }} \
-          #   --priority Spot \
+          #   
+          #   
           #   --size Standard_A1_v2 \ 
           #   --eviction-policy Delete \
           #   --custom-data ./MyCloudInitScript.yml \
-          #   --public-ip-address-dns-name backend.qbits.no \ 
+
           #   --assign-identity \
           #   --role Contributor \
           #   --scope "/subscriptions/${{ env.AZURE_SUBSCRIPTION_ID }}" \
           #   --authentication-type ssh \
-          #   --ssh-key-values ${{ env.SSH_PUBLIC_KEY }} \
           #   --tags location=${{ env.AZURE_LOCATION}} prefix=${{ env.AZURE_PREFIX }} resourcegroup=${{ env.AZURE_RESOURCE_GROUP }} \ 
           #   --subnet "/subscriptions/${{ env.AZURE_SUBSCRIPTION_ID }}/resourcegroups/${{ env.AZURE_RESOURCE_GROUP }}/providers/Microsoft.Network/virtualNetworks/vnet-main/subnets/main"
 
