@@ -40,9 +40,6 @@ jobs:
             -n rollout01-${{ env.GITHUB_RUN_NUMBER }} \
             --query properties.outputs.subnet1Id.value
 
-          # Create SSH key 
-          #az sshkey create --location ${{ env.AZURE_LOCATION }} --public-key "@filename" --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --name "mySshPublicKeyName"
-
           echo "# Deploy Virtual Machine" 
           az vm create \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
@@ -53,6 +50,12 @@ jobs:
             --public-ip-sku Standard \
             --ssh-key-values ./.ssh/id_rsa.pub \
             --public-ip-address-dns-name backend-${{ env.AZURE_PREFIX }}
+
+          echo "# open port 80 for web traffic"
+          az vm open-port \
+            --port 80 \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --name "vm-${{ env.AZURE_PREFIX }}"
 
           echo "# create dns zone" 
           az network dns zone create \
@@ -74,10 +77,10 @@ jobs:
 
           echo "# bootstrap VM"
           az vm run-command invoke \
-            -resource-group ${{ env.AZURE_RESOURCE_GROUP }}  \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }}  \
             --name "vm-${{ env.AZURE_PREFIX }}" \
             --command-id RunShellScript \
-            --scripts "curl -Lo https://github.com/oysteinje/qbits/blob/main/bootstrap-vm.sh | bash"
+            --scripts "curl https://raw.githubusercontent.com/oysteinje/qbits/main/bootstrap-vm.sh | bash"
 
           # az vm create \
 
@@ -95,6 +98,9 @@ jobs:
           #   --authentication-type ssh \
           #   --tags location=${{ env.AZURE_LOCATION}} prefix=${{ env.AZURE_PREFIX }} resourcegroup=${{ env.AZURE_RESOURCE_GROUP }} \ 
           #   --subnet "/subscriptions/${{ env.AZURE_SUBSCRIPTION_ID }}/resourcegroups/${{ env.AZURE_RESOURCE_GROUP }}/providers/Microsoft.Network/virtualNetworks/vnet-main/subnets/main"
+
+          # Create SSH key 
+          #az sshkey create --location ${{ env.AZURE_LOCATION }} --public-key "@filename" --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --name "mySshPublicKeyName"
 
 #           # Deploy Resource group 
 #           az group create -l ${{ env.AZURE_LOCATION }} -n ${{ env.AZURE_RESOURCE_GROUP }}

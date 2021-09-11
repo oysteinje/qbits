@@ -1,6 +1,6 @@
 server {
-       listen 81;
-       listen [::]:81;
+       listen 80;
+       listen [::]:80;
 
        server_name backend-ystrte.norwayeast.cloudapp.azure.com;
 
@@ -10,4 +10,6 @@ server {
        location / {
                try_files $uri $uri/ =404;
        }
+
+       access_log  /var/log/nginx/domain1.access.log;
 }
