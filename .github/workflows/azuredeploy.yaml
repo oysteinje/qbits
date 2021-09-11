@@ -25,16 +25,16 @@ jobs:
       with:
         azcliversion: 2.28.0
         inlineScript: |
-          # Deploy Resource group 
+          echo "# Deploy Resource group" 
           az group create -l ${{ env.AZURE_LOCATION }} -n ${{ env.AZURE_RESOURCE_GROUP }}
     
-          # Deploy network 
+          echo "# Deploy network"
           az deployment group create \
             --name rollout01-${{ env.GITHUB_RUN_NUMBER }} \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --template-file ./azure/azure-vnet.bicep
 
-          # Get deployment output 
+          echo "# Get deployment output" 
           az deployment group show \
             -g ${{ env.AZURE_RESOURCE_GROUP }} \
             -n rollout01-${{ env.GITHUB_RUN_NUMBER }} \
@@ -43,7 +43,7 @@ jobs:
           # Create SSH key 
           #az sshkey create --location ${{ env.AZURE_LOCATION }} --public-key "@filename" --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --name "mySshPublicKeyName"
 
-          # Deploy Virtual Machine 
+          echo "# Deploy Virtual Machine" 
           az vm create \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --location ${{ env.AZURE_LOCATION }} \
@@ -54,19 +54,19 @@ jobs:
             --ssh-key-values ./.ssh/id_rsa.pub \
             --public-ip-address-dns-name backend-${{ env.AZURE_PREFIX }}
 
-          # create dns zone 
+          echo "# create dns zone" 
           az network dns zone create \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --name azure.${{ env.AZURE_DNS_ZONE }}
 
-          # create empty cname 
+          echo "# create empty cname" 
           az network dns record-set cname create \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --zone-name azure.${{ env.AZURE_DNS_ZONE }} \
             --name ssh \
             --if-none-match 2> /dev/null
 
-          # set cname 
+          echo "# set cname" 
           az network dns record-set cname set-record \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --zone-name azure.${{ env.AZURE_DNS_ZONE }} \
