@@ -2,7 +2,7 @@ server {
        listen 81;
        listen [::]:81;
 
-       server_name ssh.azure.qbits.no;
+       server_name backend-ystrte.norwayeast.cloudapp.azure.com;
 
        root /var/www/main;
        index index.html;
