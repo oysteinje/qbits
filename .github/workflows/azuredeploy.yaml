@@ -60,9 +60,9 @@ jobs:
             --name ${{ env.AZURE_DNS_ZONE }}
 
           az network dns record-set cname create \
-            --name backend-${{ env.AZURE_PREFIX }}
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }}
-            --zone-name qbits.no
+            --name backend-${{ env.AZURE_PREFIX }} \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --zone-name qbits.no \
             --target-resource "/subscriptions/${{ env.AZURE_SUBSCRIPTION_ID }}/resourcegroups/${{ env.AZURE_RESOURCE_GROUP }}/providers/Microsoft.Network/publicIPAddresses/vm-${{ env.AZURE_PREFIX }}PublicIP"
 
           # az vm create \
