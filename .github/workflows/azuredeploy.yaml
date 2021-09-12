@@ -98,7 +98,7 @@ jobs:
           az network dns record-set cname set-record \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --zone-name ${{ env.AZURE_DNS_ZONE }} \
-            --record-set-name me.qbits \
+            --record-set-name me \
             --cname oysteinje.github.io
 
           echo "# bootstrap VM"
