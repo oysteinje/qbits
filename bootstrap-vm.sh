@@ -44,11 +44,18 @@ cd
 curl -sL https://firebase.tools | bash
 export FIREBASE_TOKEN=$(cat firebase_token)
 
+# install node js server
+npm install server
+curl https://raw.githubusercontent.com/oysteinje/qbits/main/index.js -o index.js
+
+
 # Install monkeytype 
-cd
-git clone git@github.com:Miodec/monkeytype.git
-json='{"projects": { "default": "monkeytype-90585" } }'
-echo $json > monkeytype/.firebaserc_example
-cd monkeytype
-npm install
-npm run start:dev
+# cd
+# git clone https://github.com/Miodec/monkeytype.git
+# json='{"projects": { "default": "monkeytype-90585" } }'
+# echo $json > monkeytype/.firebaserc
+# TODO: add backend/credentials/monkeytype-90585-firebase-adminsdk-6c3q5-8c837a663f.json 
+#cd monkeytype
+#npm install
+# npm run start:dev
+
