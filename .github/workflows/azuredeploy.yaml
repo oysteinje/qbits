@@ -54,8 +54,11 @@ jobs:
             --ssh-key-values ./.ssh/id_rsa.pub \
             --public-ip-address-dns-name backend-${{ env.AZURE_PREFIX }} \
             --assign-identity \
-            --size Standard_B2s
-
+            --size Standard_A1_v2 \ # Standard_B2s 
+            --priority Spot \
+            --max-price -1 \
+            --eviction-policy Deallocate
+            
           echo "# open port 80 for web traffic"
           az vm open-port \
             --port 80 \
