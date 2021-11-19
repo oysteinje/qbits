@@ -43,73 +43,89 @@ jobs:
             -n rollout01-${{ env.GITHUB_RUN_NUMBER }} \
             --query properties.outputs.subnet1Id.value
 
-          echo "# Deploy Virtual Machine" 
-          az vm create \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --location ${{ env.AZURE_LOCATION }} \
-            --name "vm-${{ env.AZURE_PREFIX }}" \
-            --image UbuntuLTS \
-            --admin-username azureuser \
-            --public-ip-sku Standard \
-            --ssh-key-values ./.ssh/id_rsa.pub \
-            --public-ip-address-dns-name backend-${{ env.AZURE_PREFIX }} \
-            --assign-identity \
-            --size Standard_A1_v2 \ # Standard_B2s 
-            --priority Spot \
-            --max-price -1 \
-            --eviction-policy Deallocate
+          az network public-ip create \
+            -n "gw-pip-main" \
+            -g ${{ env.AZURE_RESOURCE_GROUP }} \
+            --allocation-method Dynamic
             
-          echo "# open port 80 for web traffic"
-          az vm open-port \
-            --port 80 \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --name "vm-${{ env.AZURE_PREFIX }}" \
-            --priority 900
+          az network vnet-gateway create \
+            -n "gw-main" \
+            -l ${{ env.AZURE_LOCATION }} \
+            --public-ip-address VNet1GWIP \
+            -g ${{ env.AZURE_RESOURCE_GROUP }} \
+            --vnet "vnet-main" \
+            --gateway-type "Vpn" \
+            --sku "Basic" \
+            --vpn-type "RouteBased" \
+            --no-wait
 
-          echo "# open port 443 for web traffic"
-          az vm open-port \
-            --port 443 \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --name "vm-${{ env.AZURE_PREFIX }}" \
-            --priority 800
+          # echo "# Deploy Virtual Machine" 
+          # az vm create \
+          #   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+          #   --location ${{ env.AZURE_LOCATION }} \
+          #   --name "vm-${{ env.AZURE_PREFIX }}" \
+          #   --image UbuntuLTS \
+          #   --admin-username azureuser \
+          #   --public-ip-sku Standard \
+          #   --ssh-key-values ./.ssh/id_rsa.pub \
+          #   --public-ip-address-dns-name backend-${{ env.AZURE_PREFIX }} \
+          #   --assign-identity \
+          #   --size Standard_A1_v2 \ # Standard_B2s 
+          #   --priority Spot \
+          #   --max-price -1 \
+          #   --eviction-policy Deallocate
+            
+          # echo "# open port 80 for web traffic"
+          # az vm open-port \
+          #   --port 80 \
+          #   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+          #   --name "vm-${{ env.AZURE_PREFIX }}" \
+          #   --priority 900
 
-          echo "# create dns zone" 
-          az network dns zone create \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --name ${{ env.AZURE_DNS_ZONE }}
+          # echo "# open port 443 for web traffic"
+          # az vm open-port \
+          #   --port 443 \
+          #   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+          #   --name "vm-${{ env.AZURE_PREFIX }}" \
+          #   --priority 800
 
-          echo "# create empty cname" 
-          az network dns record-set cname create \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --zone-name ${{ env.AZURE_DNS_ZONE }} \
-            --name main.azure
+          # echo "# create dns zone" 
+          # az network dns zone create \
+          #   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+          #   --name ${{ env.AZURE_DNS_ZONE }}
 
-          echo "# set cname" 
-          az network dns record-set cname set-record \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --zone-name ${{ env.AZURE_DNS_ZONE }} \
-            --record-set-name main.azure \
-            --cname backend-${{ env.AZURE_PREFIX }}.${{ env.AZURE_LOCATION }}.cloudapp.azure.com
+          # echo "# create empty cname" 
+          # az network dns record-set cname create \
+          #   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+          #   --zone-name ${{ env.AZURE_DNS_ZONE }} \
+          #   --name main.azure
 
-          echo "# create empty cname for me.qbits.no" 
-          az network dns record-set cname create \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --zone-name ${{ env.AZURE_DNS_ZONE }} \
-            --name me
+          # echo "# set cname" 
+          # az network dns record-set cname set-record \
+          #   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+          #   --zone-name ${{ env.AZURE_DNS_ZONE }} \
+          #   --record-set-name main.azure \
+          #   --cname backend-${{ env.AZURE_PREFIX }}.${{ env.AZURE_LOCATION }}.cloudapp.azure.com
 
-          echo "# set cname for me.qbits.no" 
-          az network dns record-set cname set-record \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --zone-name ${{ env.AZURE_DNS_ZONE }} \
-            --record-set-name me \
-            --cname oysteinje.github.io
+          # echo "# create empty cname for me.qbits.no" 
+          # az network dns record-set cname create \
+          #   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+          #   --zone-name ${{ env.AZURE_DNS_ZONE }} \
+          #   --name me
 
-          echo "# bootstrap VM"
-          az vm run-command invoke \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }}  \
-            --name "vm-${{ env.AZURE_PREFIX }}" \
-            --command-id RunShellScript \
-            --scripts "export FIREBASE_TOKEN=${{ secrets.FIREBASE_TOKEN }}; echo ${{ secrets.FIREBASE_TOKEN }} > firebase_token;  curl https://raw.githubusercontent.com/oysteinje/qbits/main/bootstrap-vm.sh | bash"
+          # echo "# set cname for me.qbits.no" 
+          # az network dns record-set cname set-record \
+          #   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+          #   --zone-name ${{ env.AZURE_DNS_ZONE }} \
+          #   --record-set-name me \
+          #   --cname oysteinje.github.io
+
+          # echo "# bootstrap VM"
+          # az vm run-command invoke \
+          #   --resource-group ${{ env.AZURE_RESOURCE_GROUP }}  \
+          #   --name "vm-${{ env.AZURE_PREFIX }}" \
+          #   --command-id RunShellScript \
+          #   --scripts "export FIREBASE_TOKEN=${{ secrets.FIREBASE_TOKEN }}; echo ${{ secrets.FIREBASE_TOKEN }} > firebase_token;  curl https://raw.githubusercontent.com/oysteinje/qbits/main/bootstrap-vm.sh | bash"
 
           # az vm create \
 
