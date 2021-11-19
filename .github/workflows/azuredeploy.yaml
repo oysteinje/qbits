@@ -51,7 +51,7 @@ jobs:
           az network vnet-gateway create \
             -n "gw-main" \
             -l ${{ env.AZURE_LOCATION }} \
-            --public-ip-address VNet1GWIP \
+            --public-ip-address "gw-pip-main" \
             -g ${{ env.AZURE_RESOURCE_GROUP }} \
             --vnet "vnet-main" \
             --gateway-type "Vpn" \
