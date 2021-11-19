@@ -19,6 +19,7 @@ az group create \
 # echo "# Deploy network"
 # az deployment group create \
 #   --name rollout01-${{ env.GITHUB_RUN_NUMBER }} \
+
 #   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
 #   --template-file ./azure/azure-vnet.bicep
 
@@ -26,7 +27,7 @@ echo "# Deploy Key Vault"
 az deployment group create \
   --name rollout01-$RANDOM \
   --resource-group $AZURE_RESOURCE_GROUP \
-  --template-file keyvault.bicep
+  --template-file ./keyvault.bicep
 
 echo "# Generate key in Key Vault"
 az keyvault key create \
