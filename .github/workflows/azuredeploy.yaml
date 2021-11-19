@@ -29,8 +29,22 @@ jobs:
           set -o xtrace
 
           echo "# Deploy Resource group" 
-          az group create -l ${{ env.AZURE_LOCATION }} -n ${{ env.AZURE_RESOURCE_GROUP }}
-    
+          az group create \
+            -l ${{ env.AZURE_LOCATION }} \
+            -n ${{ env.AZURE_RESOURCE_GROUP }}
+
+          echo "# Deploy Key Vault"
+          az keyvault create \
+            --name "kv-main" \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --location ${{ env.AZURE_LOCATION }}
+
+          echo "# Generate self signed certificate"
+          az keyvault certificate create \
+            --vault-name "kv-main" \
+            -n "root-cert" \
+            -p "$(az keyvault certificate get-default-policy)"
+          
           echo "# Deploy network"
           az deployment group create \
             --name rollout01-${{ env.GITHUB_RUN_NUMBER }} \
@@ -47,7 +61,7 @@ jobs:
             -n "gw-pip-main" \
             -g ${{ env.AZURE_RESOURCE_GROUP }} \
             --allocation-method Dynamic
-            
+
           az network vnet-gateway create \
             -n "gw-main" \
             -l ${{ env.AZURE_LOCATION }} \
@@ -57,6 +71,9 @@ jobs:
             --gateway-type "Vpn" \
             --sku "Basic" \
             --vpn-type "RouteBased" \
+            --client-protocol OpenVPN \
+            --root-cert-name root-cert \
+            --root-cert-data "root-cert.cer" \
             --no-wait
 
           # echo "# Deploy Virtual Machine" 
