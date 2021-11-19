@@ -1,7 +1,7 @@
 param hubNetwork object = {
   name: 'vnet-main'
   addressPrefix: '10.0.0.0/8'
-  subnet1Name: 'GatewaySubnets'
+  subnet1Name: 'GatewaySubnet'
   subnet1Prefix: '10.0.0.0/27'
   subnet2Name: 'main'
   subnet2Prefix: '10.0.1.0/24'
