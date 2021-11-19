@@ -25,56 +25,59 @@ jobs:
       with:
         azcliversion: 'latest'
         inlineScript: |
-          echo "# Enable xtrace"
-          set -o xtrace
+          chmod +x $GITHUB_WORKSPACE/azure/deploy.sh
+          $GITHUB_WORKSPACE/deploy.sh
 
-          echo "# Deploy Resource group" 
-          az group create \
-            -l ${{ env.AZURE_LOCATION }} \
-            -n ${{ env.AZURE_RESOURCE_GROUP }}
+          # echo "# Enable xtrace"
+          # set -o xtrace
 
-          echo "# Deploy Key Vault"
-          az keyvault create \
-            --name "kv-main" \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --location ${{ env.AZURE_LOCATION }}
+          # echo "# Deploy Resource group" 
+          # az group create \
+          #   -l ${{ env.AZURE_LOCATION }} \
+          #   -n ${{ env.AZURE_RESOURCE_GROUP }}
 
-          echo "# Generate self signed certificate"
-          az keyvault certificate create \
-            --vault-name "kv-main" \
-            -n "root-cert" \
-            -p "$(az keyvault certificate get-default-policy)"
+          # echo "# Deploy Key Vault"
+          # az keyvault create \
+          #   --name "kv-main" \
+          #   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+          #   --location ${{ env.AZURE_LOCATION }}
+
+          # echo "# Generate self signed certificate"
+          # az keyvault certificate create \
+          #   --vault-name "kv-main" \
+          #   -n "root-cert" \
+          #   -p "$(az keyvault certificate get-default-policy)"
           
-          echo "# Deploy network"
-          az deployment group create \
-            --name rollout01-${{ env.GITHUB_RUN_NUMBER }} \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --template-file ./azure/azure-vnet.bicep
+          # echo "# Deploy network"
+          # az deployment group create \
+          #   --name rollout01-${{ env.GITHUB_RUN_NUMBER }} \
+          #   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+          #   --template-file ./azure/azure-vnet.bicep
 
-          echo "# Get deployment output" 
-          az deployment group show \
-            -g ${{ env.AZURE_RESOURCE_GROUP }} \
-            -n rollout01-${{ env.GITHUB_RUN_NUMBER }} \
-            --query properties.outputs.subnet1Id.value
+          # echo "# Get deployment output" 
+          # az deployment group show \
+          #   -g ${{ env.AZURE_RESOURCE_GROUP }} \
+          #   -n rollout01-${{ env.GITHUB_RUN_NUMBER }} \
+          #   --query properties.outputs.subnet1Id.value
 
-          az network public-ip create \
-            -n "gw-pip-main" \
-            -g ${{ env.AZURE_RESOURCE_GROUP }} \
-            --allocation-method Dynamic
+          # az network public-ip create \
+          #   -n "gw-pip-main" \
+          #   -g ${{ env.AZURE_RESOURCE_GROUP }} \
+          #   --allocation-method Dynamic
 
-          az network vnet-gateway create \
-            -n "gw-main" \
-            -l ${{ env.AZURE_LOCATION }} \
-            --public-ip-address "gw-pip-main" \
-            -g ${{ env.AZURE_RESOURCE_GROUP }} \
-            --vnet "vnet-main" \
-            --gateway-type "Vpn" \
-            --sku "Basic" \
-            --vpn-type "RouteBased" \
-            --client-protocol OpenVPN \
-            --root-cert-name root-cert \
-            --root-cert-data "root-cert.cer" \
-            --no-wait
+          # az network vnet-gateway create \
+          #   -n "gw-main" \
+          #   -l ${{ env.AZURE_LOCATION }} \
+          #   --public-ip-address "gw-pip-main" \
+          #   -g ${{ env.AZURE_RESOURCE_GROUP }} \
+          #   --vnet "vnet-main" \
+          #   --gateway-type "Vpn" \
+          #   --sku "Basic" \
+          #   --vpn-type "RouteBased" \
+          #   --client-protocol OpenVPN \
+          #   --root-cert-name root-cert \
+          #   --root-cert-data "root-cert.cer" \
+          #   --no-wait
 
           # echo "# Deploy Virtual Machine" 
           # az vm create \
