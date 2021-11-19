@@ -27,8 +27,8 @@ jobs:
         inlineScript: |
           ls
           
-          chmod +x /azure/deploy.sh
-          /deploy.sh
+          chmod +x azure/deploy.sh
+          azure/deploy.sh
 
           # echo "# Enable xtrace"
           # set -o xtrace
