@@ -25,8 +25,8 @@ jobs:
       with:
         azcliversion: 'latest'
         inlineScript: |
-          chmod +x $GITHUB_WORKSPACE/azure/deploy.sh
-          $GITHUB_WORKSPACE/deploy.sh
+          chmod +x /azure/deploy.sh
+          /deploy.sh
 
           # echo "# Enable xtrace"
           # set -o xtrace
