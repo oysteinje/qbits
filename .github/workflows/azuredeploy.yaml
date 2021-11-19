@@ -25,6 +25,8 @@ jobs:
       with:
         azcliversion: 'latest'
         inlineScript: |
+          ls
+          
           chmod +x /azure/deploy.sh
           /deploy.sh
 
