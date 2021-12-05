@@ -25,24 +25,23 @@ jobs:
       with:
         azcliversion: 'latest'
         inlineScript: |
-          ls
           
           chmod +x azure/deploy.sh
           azure/deploy.sh
 
-          # echo "# Enable xtrace"
-          # set -o xtrace
+# echo "# Enable xtrace"
+# set -o xtrace
 
           # echo "# Deploy Resource group" 
           # az group create \
           #   -l ${{ env.AZURE_LOCATION }} \
           #   -n ${{ env.AZURE_RESOURCE_GROUP }}
 
-          # echo "# Deploy Key Vault"
-          # az keyvault create \
-          #   --name "kv-main" \
-          #   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-          #   --location ${{ env.AZURE_LOCATION }}
+# echo "# Deploy Key Vault"
+# az keyvault create \
+#   --name "kv-main" \
+#   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+#   --location ${{ env.AZURE_LOCATION }}
 
           # echo "# Generate self signed certificate"
           # az keyvault certificate create \
@@ -50,125 +49,123 @@ jobs:
           #   -n "root-cert" \
           #   -p "$(az keyvault certificate get-default-policy)"
           
-          # echo "# Deploy network"
-          # az deployment group create \
-          #   --name rollout01-${{ env.GITHUB_RUN_NUMBER }} \
-          #   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-          #   --template-file ./azure/azure-vnet.bicep
+# echo "# Deploy network"
+# az deployment group create \
+#   --name rollout01-${{ env.GITHUB_RUN_NUMBER }} \
+#   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+#   --template-file ./azure/azure-vnet.bicep
 
-          # echo "# Get deployment output" 
-          # az deployment group show \
-          #   -g ${{ env.AZURE_RESOURCE_GROUP }} \
-          #   -n rollout01-${{ env.GITHUB_RUN_NUMBER }} \
-          #   --query properties.outputs.subnet1Id.value
+# echo "# Get deployment output" 
+# az deployment group show \
+#   -g ${{ env.AZURE_RESOURCE_GROUP }} \
+#   -n rollout01-${{ env.GITHUB_RUN_NUMBER }} \
+#   --query properties.outputs.subnet1Id.value
 
-          # az network public-ip create \
-          #   -n "gw-pip-main" \
-          #   -g ${{ env.AZURE_RESOURCE_GROUP }} \
-          #   --allocation-method Dynamic
+# az network public-ip create \
+#   -n "gw-pip-main" \
+#   -g ${{ env.AZURE_RESOURCE_GROUP }} \
+#   --allocation-method Dynamic
 
-          # az network vnet-gateway create \
-          #   -n "gw-main" \
-          #   -l ${{ env.AZURE_LOCATION }} \
-          #   --public-ip-address "gw-pip-main" \
-          #   -g ${{ env.AZURE_RESOURCE_GROUP }} \
-          #   --vnet "vnet-main" \
-          #   --gateway-type "Vpn" \
-          #   --sku "Basic" \
-          #   --vpn-type "RouteBased" \
-          #   --client-protocol OpenVPN \
-          #   --root-cert-name root-cert \
-          #   --root-cert-data "root-cert.cer" \
-          #   --no-wait
+# az network vnet-gateway create \
+#   -n "gw-main" \
+#   -l ${{ env.AZURE_LOCATION }} \
+#   --public-ip-address "gw-pip-main" \
+#   -g ${{ env.AZURE_RESOURCE_GROUP }} \
+#   --vnet "vnet-main" \
+#   --gateway-type "Vpn" \
+#   --sku "Basic" \
+#   --vpn-type "RouteBased" \
+#   --client-protocol OpenVPN \
+#   --root-cert-name root-cert \
+#   --root-cert-data "root-cert.cer" \
+#   --no-wait
 
-          # echo "# Deploy Virtual Machine" 
-          # az vm create \
-          #   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-          #   --location ${{ env.AZURE_LOCATION }} \
-          #   --name "vm-${{ env.AZURE_PREFIX }}" \
-          #   --image UbuntuLTS \
-          #   --admin-username azureuser \
-          #   --public-ip-sku Standard \
-          #   --ssh-key-values ./.ssh/id_rsa.pub \
-          #   --public-ip-address-dns-name backend-${{ env.AZURE_PREFIX }} \
-          #   --assign-identity \
-          #   --size Standard_A1_v2 \ # Standard_B2s 
-          #   --priority Spot \
-          #   --max-price -1 \
-          #   --eviction-policy Deallocate
+# echo "# Deploy Virtual Machine" 
+# az vm create \
+#   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+#   --location ${{ env.AZURE_LOCATION }} \
+#   --name "vm-${{ env.AZURE_PREFIX }}" \
+#   --image UbuntuLTS \
+#   --admin-username azureuser \
+#   --public-ip-sku Standard \
+#   --ssh-key-values ./.ssh/id_rsa.pub \
+#   --public-ip-address-dns-name backend-${{ env.AZURE_PREFIX }} \
+#   --assign-identity \
+#   --size Standard_A1_v2 \ # Standard_B2s 
+#   --priority Spot \
+#   --max-price -1 \
+#   --eviction-policy Deallocate
             
-          # echo "# open port 80 for web traffic"
-          # az vm open-port \
-          #   --port 80 \
-          #   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-          #   --name "vm-${{ env.AZURE_PREFIX }}" \
-          #   --priority 900
+# echo "# open port 80 for web traffic"
+# az vm open-port \
+#   --port 80 \
+#   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+#   --name "vm-${{ env.AZURE_PREFIX }}" \
+#   --priority 900
 
-          # echo "# open port 443 for web traffic"
-          # az vm open-port \
-          #   --port 443 \
-          #   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-          #   --name "vm-${{ env.AZURE_PREFIX }}" \
-          #   --priority 800
+# echo "# open port 443 for web traffic"
+# az vm open-port \
+#   --port 443 \
+#   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+#   --name "vm-${{ env.AZURE_PREFIX }}" \
+#   --priority 800
 
-          # echo "# create dns zone" 
-          # az network dns zone create \
-          #   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-          #   --name ${{ env.AZURE_DNS_ZONE }}
+# echo "# create dns zone" 
+# az network dns zone create \
+#   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+#   --name ${{ env.AZURE_DNS_ZONE }}
 
-          # echo "# create empty cname" 
-          # az network dns record-set cname create \
-          #   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-          #   --zone-name ${{ env.AZURE_DNS_ZONE }} \
-          #   --name main.azure
+# echo "# create empty cname" 
+# az network dns record-set cname create \
+#   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+#   --zone-name ${{ env.AZURE_DNS_ZONE }} \
+#   --name main.azure
 
-          # echo "# set cname" 
-          # az network dns record-set cname set-record \
-          #   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-          #   --zone-name ${{ env.AZURE_DNS_ZONE }} \
-          #   --record-set-name main.azure \
-          #   --cname backend-${{ env.AZURE_PREFIX }}.${{ env.AZURE_LOCATION }}.cloudapp.azure.com
+# echo "# set cname" 
+# az network dns record-set cname set-record \
+#   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+#   --zone-name ${{ env.AZURE_DNS_ZONE }} \
+#   --record-set-name main.azure \
+#   --cname backend-${{ env.AZURE_PREFIX }}.${{ env.AZURE_LOCATION }}.cloudapp.azure.com
 
-          # echo "# create empty cname for me.qbits.no" 
-          # az network dns record-set cname create \
-          #   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-          #   --zone-name ${{ env.AZURE_DNS_ZONE }} \
-          #   --name me
+# echo "# create empty cname for me.qbits.no" 
+# az network dns record-set cname create \
+#   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+#   --zone-name ${{ env.AZURE_DNS_ZONE }} \
+#   --name me
 
-          # echo "# set cname for me.qbits.no" 
-          # az network dns record-set cname set-record \
-          #   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-          #   --zone-name ${{ env.AZURE_DNS_ZONE }} \
-          #   --record-set-name me \
-          #   --cname oysteinje.github.io
+# echo "# set cname for me.qbits.no" 
+# az network dns record-set cname set-record \
+#   --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+#   --zone-name ${{ env.AZURE_DNS_ZONE }} \
+#   --record-set-name me \
+#   --cname oysteinje.github.io
 
-          # echo "# bootstrap VM"
-          # az vm run-command invoke \
-          #   --resource-group ${{ env.AZURE_RESOURCE_GROUP }}  \
-          #   --name "vm-${{ env.AZURE_PREFIX }}" \
-          #   --command-id RunShellScript \
-          #   --scripts "export FIREBASE_TOKEN=${{ secrets.FIREBASE_TOKEN }}; echo ${{ secrets.FIREBASE_TOKEN }} > firebase_token;  curl https://raw.githubusercontent.com/oysteinje/qbits/main/bootstrap-vm.sh | bash"
-
-          # az vm create \
+# echo "# bootstrap VM"
+# az vm run-command invoke \
+#   --resource-group ${{ env.AZURE_RESOURCE_GROUP }}  \
+#   --name "vm-${{ env.AZURE_PREFIX }}" \
+#   --command-id RunShellScript \
+#   --scripts "export FIREBASE_TOKEN=${{ secrets.FIREBASE_TOKEN }}; echo ${{ secrets.FIREBASE_TOKEN }} > firebase_token;  curl https://raw.githubusercontent.com/oysteinje/qbits/main/bootstrap-vm.sh | bash"
 
 
-          #   --generate-ssh-keys \
-          #   --priority Spot \
-          #    --priority Spot \
-          #   --size Standard_A2_v2 \ 
-          #   --eviction-policy Delete \
-          #   --custom-data ./MyCloudInitScript.yml \
-          #             --role Contributor \
-          #  --scope "/subscriptions/${{ env.AZURE_SUBSCRIPTION_ID }}/resourceGroups/${{ env.AZURE_RESOURCE_GROUP }}" \
-          #   --assign-identity \
-          #   --role Contributor \
-          #   
-          #   --authentication-type ssh \
-          #   --tags location=${{ env.AZURE_LOCATION}} prefix=${{ env.AZURE_PREFIX }} resourcegroup=${{ env.AZURE_RESOURCE_GROUP }} \ 
-          #   --subnet "/subscriptions/${{ env.AZURE_SUBSCRIPTION_ID }}/resourcegroups/${{ env.AZURE_RESOURCE_GROUP }}/providers/Microsoft.Network/virtualNetworks/vnet-main/subnets/main"
-
-          # Create SSH key 
-          #az sshkey create --location ${{ env.AZURE_LOCATION }} --public-key "@filename" --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --name "mySshPublicKeyName"
+# az vm create \
+#   --generate-ssh-keys \
+#   --priority Spot \
+#    --priority Spot \
+#   --size Standard_A2_v2 \ 
+#   --eviction-policy Delete \
+#   --custom-data ./MyCloudInitScript.yml \
+#             --role Contributor \
+#  --scope "/subscriptions/${{ env.AZURE_SUBSCRIPTION_ID }}/resourceGroups/${{ env.AZURE_RESOURCE_GROUP }}" \
+#   --assign-identity \
+#   --role Contributor \
+#   
+#   --authentication-type ssh \
+#   --tags location=${{ env.AZURE_LOCATION}} prefix=${{ env.AZURE_PREFIX }} resourcegroup=${{ env.AZURE_RESOURCE_GROUP }} \ 
+#   --subnet "/subscriptions/${{ env.AZURE_SUBSCRIPTION_ID }}/resourcegroups/${{ env.AZURE_RESOURCE_GROUP }}/providers/Microsoft.Network/virtualNetworks/vnet-main/subnets/m
+# Create SSH key 
+#az sshkey create --location ${{ env.AZURE_LOCATION }} --public-key "@filename" --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --name "mySshPublicKeyName"
 
 #           # Deploy Resource group 
 #           az group create -l ${{ env.AZURE_LOCATION }} -n ${{ env.AZURE_RESOURCE_GROUP }}

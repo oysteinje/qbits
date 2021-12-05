@@ -13,6 +13,74 @@ resource symbolicname 'Microsoft.KeyVault/vaults@2021-06-01-preview' = {
   properties: {
     accessPolicies: [
       {
+        objectId: '8ff4248c-73b1-46a6-a2b3-38ab4fc6e666'
+        permissions: {
+          certificates: [ 
+            'backup'
+            'create'
+            'delete'
+            'deleteissuers'
+            'get'
+            'getissuers'
+            'import'
+            'list'
+            'listissuers'
+            'managecontacts'
+            'manageissuers'
+            'purge'
+            'recover'
+            'restore'
+            'setissuers'
+            'update'
+          ]
+          keys: [
+            'backup'
+            'create'
+            'decrypt'
+            'delete'
+            'encrypt'
+            'get'
+            'import'
+            'list'
+            'purge'
+            'recover'
+            'restore'
+            'sign'
+            'unwrapKey'
+            'update'
+            'verify'
+            'wrapKey'
+          ]
+          secrets: [
+            'backup'
+            'delete'
+            'get'
+            'list'
+            'purge'
+            'recover'
+            'restore'
+            'set'
+          ]
+          storage: [
+            'backup'
+            'delete'
+            'deletesas'
+            'get'
+            'getsas'
+            'list'
+            'listsas'
+            'purge'
+            'recover'
+            'regeneratekey'
+            'restore'
+            'set'
+            'setsas'
+            'update'
+          ]
+        }
+        tenantId: '040886fa-09b0-4e7f-8cad-9e9797dd96a0'
+      }
+      {
         objectId: '924f04b7-838a-4f91-adcc-eff21ee80214'
         permissions: {
           certificates: [ 

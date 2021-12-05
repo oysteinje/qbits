@@ -1,0 +1,14 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "adminPasswordOrKey": {
+        "reference": {
+          "keyVault": {
+            "id": "/subscriptions/a83145a3-215b-44a4-9387-a540faaa58e9/resourceGroups/rg-main/providers/Microsoft.KeyVault/vaults/kv-main-qbits"
+          },
+          "secretName": "pubkey-arch"
+        }
+      }
+    }
+  }
