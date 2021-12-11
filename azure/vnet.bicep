@@ -5,6 +5,8 @@ param hubNetwork object = {
   subnet1Prefix: '10.0.0.0/27'
   subnet2Name: 'subnet-main'
   subnet2Prefix: '10.0.1.0/24'
+  subnet3Name: 'subnet-aks'
+  subnet3Prefix: '10.0.2.0/24'
 }
 
 param location string = resourceGroup().location
@@ -30,6 +32,12 @@ resource vnetHub 'Microsoft.Network/virtualNetworks@2020-05-01' = {
         properties: {
           addressPrefix: hubNetwork.subnet2Prefix
         }
+      }
+      {
+	name: hubNetwork.subnet3Name
+	properties: {
+	  addressPrefix: hubNetwork.subnet3Prefix
+	}
       }
     ]
   }
