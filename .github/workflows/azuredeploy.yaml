@@ -26,5 +26,5 @@ jobs:
         azcliversion: 'latest'
         inlineScript: |
           
-          chmod +x azure/deployAks.sh
-          azure/deployAks.sh
+          chmod +x azure/aks/deployAks.sh
+          azure/aks/deployAks.sh
