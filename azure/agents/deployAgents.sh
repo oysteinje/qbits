@@ -29,5 +29,5 @@ az vmss create \
   --single-placement-group false \
   --platform-fault-domain-count 1 \
   --vnet-name $AZURE_VNET \
-  --subnet $AZURE_SUBNET
+  --subnet $AZURE_SUBNET \
   --load-balancer ""
