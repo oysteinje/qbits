@@ -23,6 +23,7 @@ az vmss create \
   --vm-sku Standard_B1ls\
   --storage-sku StandardSSD_LRS \
   --authentication-type SSH \
+  --generate-ssh-keys \
   --instance-count 1 \
   --disable-overprovision \
   --upgrade-policy-mode manual \
