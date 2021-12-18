@@ -8,7 +8,7 @@ AZURE_DNS_ZONE="qbits.no"
 AZURE_SUBSCRIPTION_ID="a83145a3-215b-44a4-9387-a540faaa58e9"
 AZURE_VNET="vnet-main"
 AZURE_SUBNET="subnet-aks"
-AZURE_KUBERNETES_VERSION="1.20.9"
+AZURE_KUBERNETES_VERSION="1.21.2"
 
 set -o xtrace
 
@@ -36,6 +36,9 @@ az aks create \
   --enable-private-cluster
 
 az aks get-credentials --resource-group ${AZURE_RESOURCE_GROUP} -n ${AZURE_AKS_NAME} --admin --overwrite-existing
+
+kubectl kustomize $GITHUB_WORKSPACE/gitops/argocd/argocd
+
 
 #echo "# Deploy aks"
 #az deployment group create \
