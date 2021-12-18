@@ -4,9 +4,9 @@ kind: Kustomization
 resources:
 -  https://raw.githubusercontent.com/argoproj/argo-cd/v2.2.0/manifests/install.yaml
 
-patchesStrategicMerge:
-- overlays/dev/argocd-cm.yaml
-- overlays/dev/argocd-rbac-cm.yaml
+  #patchesStrategicMerge:
+  #- overlays/dev/argocd-cm.yaml
+  #- overlays/dev/argocd-rbac-cm.yaml
 
 patchesJson6902:
 - path: overlays/dev/argocd-server-deploy-command.yaml
