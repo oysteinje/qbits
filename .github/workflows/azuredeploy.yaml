@@ -27,7 +27,7 @@ jobs:
       with:
         azcliversion: 'latest'
         inlineScript: |
-          chmod -x azure/agents/deployAgents.sh
+          chmod +x azure/agents/deployAgents.sh
           azure/agents/deployAgents.sh
 
           chmod +x azure/aks/deployAks.sh
