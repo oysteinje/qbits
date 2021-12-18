@@ -40,19 +40,19 @@ data:
   # A dex connector configuration (optional). See SSO configuration documentation:
   # https://github.com/argoproj/argo-cd/blob/master/docs/operator-manual/sso
   # https://dexidp.io/docs/connectors/
-  dex.config: |
-    connectors:
-      # GitHub example
-      - type: github
-        id: github
-        name: GitHub
-        config:
-          clientID: aabbccddeeff00112233
-          clientSecret: $dex.github.clientSecret
-          orgs:
-          - name: your-github-org
-            teams:
-            - red-team
+  #  dex.config: |
+  #    connectors:
+  #      # GitHub example
+  #      - type: github
+  #        id: github
+  #        name: GitHub
+  #        config:
+  #          clientID: aabbccddeeff00112233
+  #          clientSecret: $dex.github.clientSecret
+  #          orgs:
+  #          - name: your-github-org
+  #            teams:
+  #            - red-team
     # It is possible to provide custom static client for dex if you want to reuse it
     # with other services
     # staticClients:
