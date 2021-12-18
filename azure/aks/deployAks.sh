@@ -32,9 +32,10 @@ az aks create \
   --dns-service-ip "172.0.0.10" \
   --vnet-subnet-id "/subscriptions/${AZURE_SUBSCRIPTION_ID}/resourceGroups/${AZURE_VNET_RESOURCE_GROUP}/providers/Microsoft.Network/virtualNetworks/${AZURE_VNET}/subnets/${AZURE_SUBNET}" \
   --no-ssh-key \
-  --kubernetes-version $AZURE_KUBERNETES_VERSION
+  --kubernetes-version $AZURE_KUBERNETES_VERSION \
+  --enable-private-cluster
 
-az aks get-credentials --resource-group ${AZURE_RESOURCE_GROUP} -n ${AZURE_AKS_NAME} --admin
+az aks get-credentials --resource-group ${AZURE_RESOURCE_GROUP} -n ${AZURE_AKS_NAME} --admin --overwrite-existing
 
 #echo "# Deploy aks"
 #az deployment group create \
