@@ -6,6 +6,8 @@ env:
   AZURE_RESOURCE_GROUP: rg-main
   AZURE_DNS_ZONE: qbits.no
   AZURE_SUBSCRIPTION_ID: a83145a3-215b-44a4-9387-a540faaa58e9
+  AZURE_AKS_NAME: aks-qbits
+  AZURE_AKS_RESOURCE_GROUP: rg-aks
 
 jobs:
   build-and-deploy:
@@ -25,6 +27,14 @@ jobs:
       with:
         azcliversion: 'latest'
         inlineScript: |
-          
           chmod +x azure/aks/deployAks.sh
           azure/aks/deployAks.sh
+
+    - uses: azure/aks-set-context@v1
+      with:
+        creds: '${{ secrets.QBITS_AZURE_CREDENTIALS }}'
+        cluster-name: ${{ env.AZURE_AKS_NAME }}
+        resource-group: ${{ env.AZURE_AKS_RESOURCE_GROUP }}
+
+    - run: |
+        kubectl kustomize $GITHUB_WORKSPACE/gitops/argocd/argocd

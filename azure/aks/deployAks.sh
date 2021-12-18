@@ -1,9 +1,9 @@
 #!/bin/bash
 AZURE_LOCATION="norwayeast"
 AZURE_PREFIX="ystrte"
-AZURE_RESOURCE_GROUP="rg-aks"
 AZURE_VNET_RESOURCE_GROUP="rg-main"
 AZURE_AKS_NAME="aks-qbits"
+AZURE_AKS_RESOURCE_GROUP="rg-aks"
 AZURE_DNS_ZONE="qbits.no"
 AZURE_SUBSCRIPTION_ID="a83145a3-215b-44a4-9387-a540faaa58e9"
 AZURE_VNET="vnet-main"
@@ -15,13 +15,13 @@ set -o xtrace
 echo "# Deploy Resource group" 
 az group create \
   -l $AZURE_LOCATION \
-  -n $AZURE_RESOURCE_GROUP
+  -n $AZURE_AKS_RESOURCE_GROUP
 
 echo "# Deploy AKS"
 az aks create \
   -l $AZURE_LOCATION \
   -n "aks-qbits" \
-  -g $AZURE_RESOURCE_GROUP \
+  -g $AZURE_AKS_RESOURCE_GROUP \
   --enable-managed-identity \
   --network-plugin "azure" \
   --network-policy "calico" \
@@ -35,9 +35,9 @@ az aks create \
   --kubernetes-version $AZURE_KUBERNETES_VERSION \
   --enable-private-cluster
 
-az aks get-credentials --resource-group ${AZURE_RESOURCE_GROUP} -n ${AZURE_AKS_NAME} --admin --overwrite-existing
 
-kubectl kustomize $GITHUB_WORKSPACE/gitops/argocd/argocd
+
+
 
 
 #echo "# Deploy aks"
