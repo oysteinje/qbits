@@ -28,7 +28,8 @@ az aks create \
   --node-vm-size "Standard_B2s" \
   --service-cidr "172.0.0.0/16" \
   --dns-service-ip "172.0.0.10" \
-  --vnet-subnet-id "/subscriptions/${AZURE_SUBSCRIPTION_ID}/resourceGroups/${AZURE_VNET_RESOURCE_GROUP}/providers/Microsoft.Network/virtualNetworks/${AZURE_VNET}/subnets/${AZURE_SUBNET}"
+  --vnet-subnet-id "/subscriptions/${AZURE_SUBSCRIPTION_ID}/resourceGroups/${AZURE_VNET_RESOURCE_GROUP}/providers/Microsoft.Network/virtualNetworks/${AZURE_VNET}/subnets/${AZURE_SUBNET}" \
+  --generate-ssh-keys
 
 #echo "# Deploy aks"
 #az deployment group create \
