@@ -40,4 +40,4 @@ jobs:
         resource-group: ${{ env.AZURE_AKS_RESOURCE_GROUP }}
 
     - run: |
-        kubectl kustomize $GITHUB_WORKSPACE/gitops/argocd/argocd
+        kubectl apply -k $GITHUB_WORKSPACE/gitops/argocd/argocd

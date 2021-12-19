@@ -9,6 +9,7 @@ AZURE_SUBSCRIPTION_ID="a83145a3-215b-44a4-9387-a540faaa58e9"
 AZURE_VNET="vnet-main"
 AZURE_SUBNET="subnet-aks"
 AZURE_KUBERNETES_VERSION="1.21.2"
+AZURE_AKS_DNS_PREFIX="aks-qbits"
 
 set -o xtrace
 
@@ -32,7 +33,8 @@ az aks create \
   --dns-service-ip "172.0.0.10" \
   --vnet-subnet-id "/subscriptions/${AZURE_SUBSCRIPTION_ID}/resourceGroups/${AZURE_VNET_RESOURCE_GROUP}/providers/Microsoft.Network/virtualNetworks/${AZURE_VNET}/subnets/${AZURE_SUBNET}" \
   --no-ssh-key \
-  --kubernetes-version $AZURE_KUBERNETES_VERSION
+  --kubernetes-version $AZURE_KUBERNETES_VERSION \
+  --dns-name-prefix $AZURE_AKS_DNS_PREFIX
 
 
 
