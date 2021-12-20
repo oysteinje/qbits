@@ -15,5 +15,5 @@ appVersion: "1.0"
 
 dependencies:
 - name: aad-pod-identity 
-  version: 1.8.6 
+  version: 4.1.17
   repository: https://raw.githubusercontent.com/Azure/aad-pod-identity/master/charts 
