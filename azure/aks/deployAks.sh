@@ -4,7 +4,8 @@ AZURE_PREFIX="ystrte"
 AZURE_VNET_RESOURCE_GROUP="rg-main"
 AZURE_AKS_NAME="aks-qbits"
 AZURE_AKS_RESOURCE_GROUP="rg-aks"
-AZURE_DNS_ZONE="qbits.no"
+AZURE_DNS_ZONE="azure.qbits.no"
+AZURE_DNS_ZONE_RESOURCE_GROUP="rg-qbits"
 AZURE_SUBSCRIPTION_ID="a83145a3-215b-44a4-9387-a540faaa58e9"
 AZURE_VNET="vnet-main"
 AZURE_SUBNET="subnet-aks"
@@ -36,10 +37,25 @@ az aks create \
   --kubernetes-version $AZURE_KUBERNETES_VERSION \
   --dns-name-prefix $AZURE_AKS_DNS_PREFIX
 
+echo "# Deploy Public IP"
+az network public-ip create \
+  --name "pip-aks" \
+  --location $AZURE_LOCATION \
+  --resource-group $AZURE_AKS_RESOURCE_GROUP \
+  --allocation-method "Static" \
+  --dns-name $AZURE_AKS_DNS_PREFIX \
+  --zone 1 \
+  --sku "Standard" 
+
+echo "# Deploy DNS CNAME"
+az network dns record-set cname set-record \
+  --resource-group $AZURE_DNS_ZONE_RESOURCE_GROUP \
+  --zone-name $AZURE_DNS_ZONE \
+  --cname $(az network public-ip show -n "pip-aks" -g $AZURE_AKS_RESOURCE_GROUP --query "dnsSettings.fqdn" -o tsv) \
+  --record-set-name "ing"
 
 
-
-
+####
 #echo "# Deploy aks"
 #az deployment group create \
 #  --name aks \
@@ -47,3 +63,10 @@ az aks create \
 #  --template-file ./aks.bicep
 
 
+# az network dns record-set cname list \
+#   --resource-group $AZURE_DNS_ZONE_RESOURCE_GROUP \
+#   --zone-name $AZURE_DNS_ZONE \
+#   --query "[].name" -o tsv | grep "ing" --quiet || az network dns record-set cname create \
+#     --resource-group $AZURE_DNS_ZONE_RESOURCE_GROUP \
+#     --name "ing" \
+#     --zone-name $AZURE_DNS_ZONE
