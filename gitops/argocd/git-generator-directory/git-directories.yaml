@@ -8,7 +8,7 @@ spec:
       repoURL: https://github.com/oysteinje/qbits.git
       revision: HEAD
       directories:
-      - path: gitops/argocd/argocd/git-generator-directory/cluster-addons/*
+      - path: gitops/argocd/git-generator-directory/cluster-addons/*
   template:
     metadata:
       name: '{{path.basename}}'

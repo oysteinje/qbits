@@ -27,8 +27,8 @@ jobs:
       with:
         azcliversion: 'latest'
         inlineScript: |
-          chmod +x azure/agents/deployAgents.sh
-          azure/agents/deployAgents.sh
+          #chmod +x azure/agents/deployAgents.sh
+          #azure/agents/deployAgents.sh
 
           chmod +x azure/aks/deployAks.sh
           azure/aks/deployAks.sh
@@ -41,3 +41,4 @@ jobs:
 
     - run: |
         kubectl apply -k $GITHUB_WORKSPACE/gitops/argocd/argocd
+        kubectl apply -f $GITHUB_WORKSPACE/gitops/argocd/git-generator-directory/git-directories.yaml

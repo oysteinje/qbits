@@ -3,11 +3,9 @@ kind: Kustomization
 
 resources:
 - resources/argocd-namespace.yaml
-- https://raw.githubusercontent.com/argoproj-labs/applicationset/v0.3.0/manifests/install-with-argo-cd.yaml
-  #- https://raw.githubusercontent.com/argoproj/argo-cd/v2.2.0/manifests/install.yaml
+- https://raw.githubusercontent.com/argoproj/argo-cd/v2.2.0/manifests/install.yaml
 - resources/argocd-repositories.yaml
-  #- https://raw.githubusercontent.com/argoproj-labs/applicationset/v0.3.0/manifests/install.yaml
-- resources/git-directories.yaml
+- https://raw.githubusercontent.com/argoproj-labs/applicationset/v0.3.0/manifests/install.yaml
 
 patchesStrategicMerge:
 - overlays/dev/argocd-cm.yaml
