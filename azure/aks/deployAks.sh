@@ -35,7 +35,8 @@ az aks create \
   --vnet-subnet-id "/subscriptions/${AZURE_SUBSCRIPTION_ID}/resourceGroups/${AZURE_VNET_RESOURCE_GROUP}/providers/Microsoft.Network/virtualNetworks/${AZURE_VNET}/subnets/${AZURE_SUBNET}" \
   --no-ssh-key \
   --kubernetes-version $AZURE_KUBERNETES_VERSION \
-  --dns-name-prefix $AZURE_AKS_DNS_PREFIX
+  --dns-name-prefix $AZURE_AKS_DNS_PREFIX \
+  --enable-addons "azure-keyvault-secrets-provider"
 
 echo "# Deploy Public IP"
 az network public-ip create \
