@@ -20,3 +20,14 @@ stringData:
   url: https://kubernetes.github.io/ingress-nginx
   name: ingress-nginx-repo
   type: helm
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: bitnami-repo
+  labels:
+    argocd.argoproj.io/secret-type: repos
+stringData:
+  url: https://charts.bitnami.com/bitnami
+  name: bitnami-repo
+  type: helm
