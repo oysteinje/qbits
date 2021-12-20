@@ -31,3 +31,14 @@ stringData:
   url: https://charts.bitnami.com/bitnami
   name: bitnami-repo
   type: helm
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: aad-pod-identity-repo 
+  labels:
+    argocd.argoproj.io/secret-type: repos
+stringData:
+  url: https://raw.githubusercontent.com/Azure/aad-pod-identity/master/charts 
+  name: aad-pod-identity-repo 
+  type: helm

@@ -11,20 +11,33 @@ AZURE_VNET="vnet-main"
 AZURE_SUBNET="subnet-aks"
 AZURE_KUBERNETES_VERSION="1.21.2"
 AZURE_AKS_DNS_PREFIX="aks-qbits"
+AZURE_TENANT_ID=$(az account show --query "tenantId" -o tsv)
+AZURE_KEYVAULT_NAME="kv-main-qbits"
 
 set -o xtrace
+
+# echo "# Register the EnablePodIdentityPreview"
+# az feature register --name EnablePodIdentityPreview --namespace Microsoft.ContainerService
+# az extension add --name aks-preview
+# az extension update --name aks-preview
 
 echo "# Deploy Resource group" 
 az group create \
   -l $AZURE_LOCATION \
   -n $AZURE_AKS_RESOURCE_GROUP
 
+echo "# Create Identity for AKS" 
+az identity create \
+  --name "id-aks" \
+  --resource-group $AZURE_AKS_RESOURCE_GROUP \
+  --location $AZURE_LOCATION
+
 echo "# Deploy AKS"
 az aks create \
   -l $AZURE_LOCATION \
   -n "aks-qbits" \
   -g $AZURE_AKS_RESOURCE_GROUP \
-  --enable-managed-identity \
+  --assign-identity $(az identity show -g $AZURE_AKS_RESOURCE_GROUP -n "id-aks" --query "id" -o tsv) \
   --network-plugin "azure" \
   --network-policy "calico" \
   --yes \
@@ -36,7 +49,8 @@ az aks create \
   --no-ssh-key \
   --kubernetes-version $AZURE_KUBERNETES_VERSION \
   --dns-name-prefix $AZURE_AKS_DNS_PREFIX \
-  --enable-addons "azure-keyvault-secrets-provider"
+  --enable-addons "azure-keyvault-secrets-provider" \
+  --enable-secret-rotation
 
 echo "# Deploy Public IP"
 az network public-ip create \
@@ -55,6 +69,18 @@ az network dns record-set cname set-record \
   --cname $(az network public-ip show -n "pip-aks" -g $AZURE_AKS_RESOURCE_GROUP --query "dnsSettings.fqdn" -o tsv) \
   --record-set-name "ing"
 
+
+SECRET_AZURE_CONFIG_FILE=$( jq -n \
+                  --arg tid "$AZURE_TENANT_ID" \
+                  --arg sid "$AZURE_SUBSCRIPTION_ID" \
+                  --arg rg "$AZURE_AKS_RESOURCE_GROUP" \
+                  --arg mi "true" \
+                  '{tenantId: $tid, subscriptionId: $sid, resourceGroup: $rg, useManagedIdentityExtension: $mi}' )
+
+az keyvault secret set \
+  --vault-name "$AZURE_KEYVAULT_NAME" \
+  --name "external-dns-azure-config-file" \
+  --value "$SECRET_AZURE_CONFIG_FILE"
 
 ####
 #echo "# Deploy aks"
