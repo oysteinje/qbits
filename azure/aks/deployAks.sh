@@ -41,7 +41,7 @@ az aks create \
   --network-plugin "azure" \
   --network-policy "calico" \
   --yes \
-  --node-count 1 \
+  --node-count 2 \
   --node-vm-size "Standard_B2s" \
   --service-cidr "172.0.0.0/16" \
   --dns-service-ip "172.0.0.10" \
