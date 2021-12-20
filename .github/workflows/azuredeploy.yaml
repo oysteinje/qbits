@@ -20,6 +20,8 @@ jobs:
     - uses: azure/login@v1
       with:
         creds: ${{ secrets.QBITS_AZURE_CREDENTIALS }}
+    
+    - uses: sergeysova/jq-action@v2
 
       # Deploy resources
     - name: Azure CLI script
