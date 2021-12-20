@@ -271,28 +271,26 @@ aad-pod-identity:
   # This is a map with the AzureIdentityName being the key and the rest of the blob as value in accordance
   # to helm best practices: https://helm.sh/docs/chart_best_practices/values/#consider-how-users-will-use-your-values
   azureIdentities:
-    # "azure-identity":
-    #   # if not defined, then the azure identity will be deployed in the same namespace as the chart
-    #   namespace: ""
-    #   # if not defined, then the name of azure identity will be the same as the key
-    #   name: ""
-    #   # type 0: User-assigned identity, type 1: Service Principal, type 2: Service principal with certificate
-    #   type: 0
-    #   # /subscriptions/subscription-id/resourcegroups/resource-group/providers/Microsoft.ManagedIdentity/userAssignedIdentities/identity-name
-    #   # Required for type 0
-    #   resourceID: ""
-    #   # Required for type 0, 1 and 2
-    #   clientID: ""
-    #   # Required for type 1 and 2
-    #   tenantID: ""
-    #   # Required for type 1 and 2
-    #   clientPassword: "{\"name\":\"<secret name>\",\"namespace\":\"<secret namespace>\"}"
-    #   # Optional for type 1 and 2 (multi-tenant)
-    #   auxiliaryTenantIDs: []
-    #   binding:
-    #     name: "azure-identity-binding"
-    #     # The selector will also need to be included in labels for app deployment
-    #     selector: "demo"
+     "azure-identity":
+       # if not defined, then the azure identity will be deployed in the same namespace as the chart
+       namespace: ""
+       # if not defined, then the name of azure identity will be the same as the key
+       name: ""
+       # type 0: User-assigned identity, type 1: Service Principal, type 2: Service principal with certificate
+       type: 0
+       # /subscriptions/subscription-id/resourcegroups/resource-group/providers/Microsoft.ManagedIdentity/userAssignedIdentities/identity-name
+       # Required for type 0
+       resourceID: "/subscriptions/a83145a3-215b-44a4-9387-a540faaa58e9/resourcegroups/rg-aks/providers/Microsoft.ManagedIdentity/userAssignedIdentities/id-pods"
+       # Required for type 0, 1 and 2
+       clientID: "92323a7e-c216-408b-8504-8bbdda4c871c"
+       # Required for type 1 and 2
+       tenantID: ""
+       # Optional for type 1 and 2 (multi-tenant)
+       auxiliaryTenantIDs: []
+       binding:
+         name: "azure-identity-binding"
+         # The selector will also need to be included in labels for app deployment
+         selector: "id-pods"
   
   # If provided, the userAgent string will be appended to the pod identity user agents for all
   # ADAL, ARM and Kube API server requests.
