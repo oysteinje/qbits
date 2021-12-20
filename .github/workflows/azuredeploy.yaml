@@ -40,5 +40,5 @@ jobs:
         resource-group: ${{ env.AZURE_AKS_RESOURCE_GROUP }}
 
     - run: |
-        kubectl apply -k $GITHUB_WORKSPACE/gitops/argocd/argocd
+        kubectl apply -k $GITHUB_WORKSPACE/gitops/argocd/git-generator-directory/argocd
         kubectl apply -f $GITHUB_WORKSPACE/gitops/argocd/git-generator-directory/git-directories.yaml
