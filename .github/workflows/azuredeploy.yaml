@@ -31,9 +31,9 @@ jobs:
         inlineScript: |
           #chmod +x azure/agents/deployAgents.sh
           #azure/agents/deployAgents.sh
-	  
-	  chmod +x azure/bicep-modules/deployModules.sh
-	  azure/bicep-modules/deployModules.sh
+
+          chmod +x azure/bicep-modules/deployModules.sh
+          azure/bicep-modules/deployModules.sh
 
           chmod +x azure/aks/deployAks.sh
           azure/aks/deployAks.sh
