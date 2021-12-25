@@ -82,6 +82,13 @@ az keyvault secret set \
   --name "external-dns-azure-config-file" \
   --value "$SECRET_AZURE_CONFIG_FILE"
 
+
+echo "# Create Identity for AKS" 
+az identity create \
+  --name "id-pods" \
+  --resource-group $AZURE_AKS_RESOURCE_GROUP \
+  --location $AZURE_LOCATION
+
 ####
 #echo "# Deploy aks"
 #az deployment group create \
