@@ -3,6 +3,7 @@ name: azure-deploy-aks
 
 jobs:
   azure-deploy-aks:
+    # Authenticate towards Azure
     uses: oysteinje/qbits/.github/workflows/azure-auth.yaml@workflow
     with:
         agent: ubuntu-latest
