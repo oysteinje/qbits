@@ -15,7 +15,7 @@ jobs:
    runs-on: ${{ inputs.agent }}
    steps:
    # Checkout code
-   - uses: actions/checkout@main 
+   - uses: actions/checkout@v2
 
    # Login to azure 
    - uses: azure/login@v1
