@@ -3,7 +3,7 @@ name: caller
 
 jobs:
   call-workflow:
-    uses: oysteinje/qbits/.github/workflows/azure-auth.yaml
+    uses: oysteinje/qbits/.github/workflows/azure-auth.yaml@workflow
     with:
         agent: ubuntu-latest
     secrets:
