@@ -2,18 +2,18 @@ on: [push]
 name: azure-deploy-aks 
 
 jobs:
-  azure-deploy-aks:
+  build-and-deploy:
     uses: oysteinje/qbits/.github/workflows/azure-auth.yaml@workflow
     with:
         agent: ubuntu-latest
     secrets:
         azure_credentials: ${{ secrets.QBITS_AZURE_CREDENTIALS }}
 
-    # Deploy resources.
-    - name: Azure CLI script
-      uses: azure/CLI@v1
-      with:
-        azcliversion: 'latest'
-        inlineScript: |
-          chmod +x azure/aks/deployAks.sh
-          azure/aks/deployAks.sh
+        #    # Deploy resources.
+        #    - name: Azure CLI script
+        #      uses: azure/CLI@v1
+        #      with:
+        #        azcliversion: 'latest'
+        #        inlineScript: |
+        #          chmod +x azure/aks/deployAks.sh
+        #          azure/aks/deployAks.sh
