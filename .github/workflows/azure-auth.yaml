@@ -1,0 +1,23 @@
+name: azure-auth
+
+on:
+  workflow_call:
+    inputs:
+      agent:
+        required: true
+        type: string
+    secrets:
+      AZURE_CREDENTIALS:
+        required: true
+
+jobs:
+  azure-auth:
+   runs-on: ${{ inputs.agent }}
+   steps:
+   # Checkout code
+   - uses: actions/checkout@v2
+
+   # Login to azure 
+   - uses: azure/login@v1
+     with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}

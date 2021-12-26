@@ -1,0 +1,10 @@
+on: [push]
+name: caller
+
+jobs:
+  call-workflow:
+    uses: oysteinje/qbits/.github/workflows/azure-auth.yaml
+    with:
+        agent: ubuntu-latest
+    secrets:
+        azure_credentials: ${{ secrets.QBITS_AZURE_CREDENTIALS }}
