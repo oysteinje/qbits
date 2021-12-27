@@ -1,0 +1,25 @@
+on: [push, workflow_dispatch]
+name: azure bast 
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout code
+    - uses: actions/checkout@main
+
+    # Log into Azure
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.QBITS_AZURE_CREDENTIALS }}
+    
+    - uses: sergeysova/jq-action@v2
+
+      # Deploy resources
+    - name: Azure CLI script
+      uses: azure/CLI@v1
+      with:
+        azcliversion: 'latest'
+        inlineScript: |
+          chmod +x azure/bast/deployAks.sh
+          azure/bast/deployBast.sh
