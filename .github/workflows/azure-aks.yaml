@@ -1,19 +1,43 @@
-on: [push]
-name: azure-deploy-aks 
+on: [push, workflow_dispatch]
+name: azure deploy 
+env:
+  AZURE_LOCATION: norwayeast
+  AZURE_PREFIX: ystrte
+  AZURE_RESOURCE_GROUP: rg-main
+  AZURE_DNS_ZONE: qbits.no
+  AZURE_SUBSCRIPTION_ID: a83145a3-215b-44a4-9387-a540faaa58e9
+  AZURE_AKS_NAME: aks-qbits
+  AZURE_AKS_RESOURCE_GROUP: rg-aks
 
 jobs:
   build-and-deploy:
-    uses: oysteinje/qbits/.github/workflows/azure-auth.yaml@workflow
-    with:
-        agent: ubuntu-latest
-    secrets:
-        azure_credentials: ${{ secrets.QBITS_AZURE_CREDENTIALS }}
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout code
+    - uses: actions/checkout@main
 
-        #    # Deploy resources.
-        #    - name: Azure CLI script
-        #      uses: azure/CLI@v1
-        #      with:
-        #        azcliversion: 'latest'
-        #        inlineScript: |
-        #          chmod +x azure/aks/deployAks.sh
-        #          azure/aks/deployAks.sh
+    # Log into Azure
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.QBITS_AZURE_CREDENTIALS }}
+    
+    - uses: sergeysova/jq-action@v2
+
+      # Deploy resources
+    - name: Azure CLI script
+      uses: azure/CLI@v1
+      with:
+        azcliversion: 'latest'
+        inlineScript: |
+          chmod +x azure/aks/deployAks.sh
+          azure/aks/deployAks.sh
+
+    - uses: azure/aks-set-context@v1
+      with:
+        creds: '${{ secrets.QBITS_AZURE_CREDENTIALS }}'
+        cluster-name: ${{ env.AZURE_AKS_NAME }}
+        resource-group: ${{ env.AZURE_AKS_RESOURCE_GROUP }}
+
+    - run: |
+        kubectl apply -k $GITHUB_WORKSPACE/gitops/argocd/git-generator-directory/cluster-addons/argocd
+        kubectl apply -f $GITHUB_WORKSPACE/gitops/argocd/git-generator-directory/git-directories.yaml
