@@ -37,7 +37,7 @@ jobs:
         failOnStdErr: false
 
       # Deploy AKS 
-    - name: Azure CLI script
+    - name: deploy AKS
       uses: azure/CLI@v1
       with:
         azcliversion: 'latest'

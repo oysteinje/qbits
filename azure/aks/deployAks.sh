@@ -37,7 +37,7 @@ az identity create \
 echo "# Deploy AKS"
 az aks create \
   -l $AZURE_LOCATION \
-  -n "aks-qbits" \
+  -n $AZURE_AKS_NAME \
   -g $AZURE_AKS_RESOURCE_GROUP \
   --assign-identity $(az identity show -g $AZURE_AKS_RESOURCE_GROUP -n "id-aks" --query "id" -o tsv) \
   --network-plugin "azure" \
