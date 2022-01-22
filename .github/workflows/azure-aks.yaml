@@ -24,14 +24,13 @@ jobs:
     - uses: sergeysova/jq-action@v2
     
       # Deploy VNET 
-    - name: VNET
-      working-directory: ./azure/vnet
-      uses: azure/CLI@v1
+    - name: deploy VNET
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: 'latest'
-        inline: |
-          chmod +x azure/vnet/deployVnet.sh
-          azure/vnet/deployVnet.sh 
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ secrets.AZURE_AKS_RESOURCE_GROUP }}
+        template: ./azure/vnet/vnet.bicep
+        failOnStdErr: false
 
       # Deploy AKS 
     - name: Azure CLI script

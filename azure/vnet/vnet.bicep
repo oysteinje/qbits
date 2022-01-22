@@ -5,8 +5,10 @@ param hubNetwork object = {
   subnet1Prefix: '10.0.0.0/27'
   subnet2Name: 'subnet-main'
   subnet2Prefix: '10.0.1.0/24'
-  subnet3Name: 'subnet-aks'
+  subnet3Name: 'subnet-aks-green'
   subnet3Prefix: '10.0.2.0/24'
+  subnet4Name: 'subnet-aks-blue'
+  subnet4Prefix: '10.0.3.0/24'
 }
 
 param location string = resourceGroup().location
