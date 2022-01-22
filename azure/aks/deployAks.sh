@@ -27,8 +27,6 @@ az group create \
   -n $AZURE_AKS_RESOURCE_GROUP
 
 
-echo "# Create VNET"
-
 
 echo "# Create Identity for AKS" 
 az identity create \

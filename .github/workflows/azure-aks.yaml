@@ -53,7 +53,7 @@ jobs:
       with:
         creds: '${{ secrets.QBITS_AZURE_CREDENTIALS }}'
         cluster-name: ${{ env.AZURE_AKS_NAME_GREEN }}
-        resource-group: ${{ env.AZURE_AKS_RESOURCE_GROUP }}
+        resource-group: ${{ env.AZURE_AKS_RG_GREEN }}
 
     - run: |
         kubectl apply -k $GITHUB_WORKSPACE/gitops/argocd/git-generator-directory/cluster-addons/argocd
