@@ -25,8 +25,8 @@ jobs:
     
       # Deploy VNET 
     - name: VNET
+      working-directory: ./azure/vnet
       uses: azure/CLI@v1
-      working-directory: azure/vnet
       with:
         azcliversion: 'latest'
         inline: |
