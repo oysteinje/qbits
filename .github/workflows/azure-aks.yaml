@@ -27,8 +27,8 @@ jobs:
     - name: deploy VNET
       uses: azure/arm-deploy@v1
       with:
-        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ secrets.AZURE_AKS_RESOURCE_GROUP }}
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_AKS_RESOURCE_GROUP }}
         template: ./azure/vnet/vnet.bicep
         failOnStdErr: false
 
