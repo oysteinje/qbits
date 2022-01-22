@@ -34,10 +34,10 @@ resource vnetHub 'Microsoft.Network/virtualNetworks@2020-05-01' = {
         }
       }
       {
-	name: hubNetwork.subnet3Name
-	properties: {
-	  addressPrefix: hubNetwork.subnet3Prefix
-	}
+		name: hubNetwork.subnet3Name
+		properties: {
+	  	  addressPrefix: hubNetwork.subnet3Prefix
+		}
       }
     ]
   }

@@ -26,6 +26,10 @@ az group create \
   -l $AZURE_LOCATION \
   -n $AZURE_AKS_RESOURCE_GROUP
 
+
+echo "# Create VNET"
+
+
 echo "# Create Identity for AKS" 
 az identity create \
   --name "id-aks" \
