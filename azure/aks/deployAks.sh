@@ -1,11 +1,11 @@
 #!/bin/bash
+AZURE_AKS_RESOURCE_GROUP="rg-aks-green"
 AZURE_AKS_NAME="aks-qbits-green"
 AZURE_SUBNET_GREEN="subnet-aks-green"
 AZURE_AKS_DNS_PREFIX="aks-qbits-green"
 AZURE_LOCATION="norwayeast"
 AZURE_PREFIX="ystrte"
 AZURE_VNET_RESOURCE_GROUP="rg-main"
-AZURE_AKS_RESOURCE_GROUP="rg-aks"
 AZURE_DNS_ZONE="azure.qbits.no"
 AZURE_DNS_ZONE_RESOURCE_GROUP="rg-qbits"
 AZURE_SUBSCRIPTION_ID="a83145a3-215b-44a4-9387-a540faaa58e9"

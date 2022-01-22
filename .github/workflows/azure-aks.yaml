@@ -6,6 +6,7 @@ env:
   AZURE_RESOURCE_GROUP: rg-main
   AZURE_DNS_ZONE: qbits.no
   AZURE_SUBSCRIPTION_ID: a83145a3-215b-44a4-9387-a540faaa58e9
+  AZURE_AKS_RG_GREEN: rg-aks-green
   AZURE_AKS_NAME_GREEN: aks-qbits-green
   AZURE_AKS_SUBNET_GREEN: subnet-aks-green
   AZURE_AKS_DNS_PREFIX: aks-qbits-green
@@ -43,6 +44,7 @@ jobs:
         inlineScript: |
           chmod +x azure/aks/deployAks.sh
           azure/aks/deployAks.sh \
+            {{ env.AZURE_AKS_RG_GREEN }} \
             {{ env.AZURE_AKS_NAME_GREEN }} \
             {{ env.AZURE_AKS_SUBNET_GREEN }} \
             {{ env.AZURE_AKS_DNS_PREFIX }} 
